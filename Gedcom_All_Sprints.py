@@ -212,6 +212,40 @@ def US10_marriage_after_14(family, individuals):
 
     return Error10
 
+def US13_sibling_spacing(family, individuals):
+    errors = []
+    for fam in family.values():
+        children_ids = fam.get('Children', [])
+        birth_dates = [
+            datetime.strptime(individuals[child_id]['Birthday'], "%Y-%m-%d")
+            for child_id in children_ids if 'Birthday' in individuals[child_id]
+        ]
+        sorted_dates = sorted(birth_dates)
+        for i in range(len(sorted_dates) - 1):
+            delta = sorted_dates[i + 1] - sorted_dates[i]
+            if not (0 <= delta.days <= 1 or delta.days >= 243):  # 243 days is roughly 8 months
+                errors.append((children_ids[i], children_ids[i + 1]))
+    return errors
+
+def US16_find_males_with_different_lastnames(individuals, families):
+    males_with_different_lastnames = []  # Initialize a list to store names
+
+    for fam_id, fam in families.items():
+        # If there is a husband in the family, get his last name
+        husband_id = fam.get('Husband ID')
+        if husband_id and husband_id in individuals:
+            husband_lastname = individuals[husband_id]['Lastname']
+
+            # Iterate over the children IDs
+            for child_id in fam.get('Children', []):
+                child = individuals.get(child_id)
+                # If the child is male and last name is different, add to the list
+                if child and child['Gender'] == 'M' and child['Lastname'] != husband_lastname:
+                    males_with_different_lastnames.append(f"{child['Name']} (Family: {fam_id})")
+
+    return males_with_different_lastnames
+
+
 
 if __name__ == "__main__":
     with open("Test_File.ged", "r") as gedcomf:
@@ -247,6 +281,18 @@ if __name__ == "__main__":
             'function': US10_marriage_after_14,
             'args': (family, individuals),
             'description': "These are the details for who were married below 14 years."
+        },
+        {
+            'title': "User Story: 13 - Birth dates of siblings should be more than 8 months apart or less than 2 days apart (twins may be born one day apart, e.g. 11:59 PM and 12:02 AM the following calendar day)",
+            'function': US13_sibling_spacing,
+            'args': (family, individuals),
+            'description': "These are the details of siblings who have less difference span greater that 2 days and less than 8 months"
+        },
+        {
+            'title' : "User Story: 16 - All male members of a family should have the same last name",
+            'function' : US16_find_males_with_different_lastnames,
+            'args' : (individuals, family),
+            'description' : "Errors of All male members of a family who don't have the same last name"
         }
     ]
 
