@@ -337,65 +337,12 @@ for family_id, family in families.items():
     
     family_table.add_row([family_id, husband_id, husband_name, wife_id, wife_name, marriage_date, divorce_date, children])
 
-#User Story: 01 - Dates before current date
-def US1_dates_before_current_date(individuals, family):
-    Error01_individuals = []
-    Error01_family = []
-    for id in individuals:
-        if individuals[id]['death_date']!='NA' and individuals[id]['death_date']!=None:
-            deathday = datetime.strptime(individuals[id]["death_date"], "%d %b %Y")
-            birthday = datetime.strptime(individuals[id]["birth_date"], "%d %b %Y")
-            if deathday > datetime.now():
-                Error01_individuals.append(individuals[id])
-            if birthday > datetime.now():
-                Error01_individuals.append(individuals[id])
-
-    for id in family:
-        if family[id]["divorce_date"] != 'NA' and family[id]["divorce_date"] != None:
-            divorceday = datetime.strptime(family[id]["divorce_date"], "%d %b %Y")
-            marriageday = datetime.strptime(family[id]["marriage_date"], "%d %b %Y")
-            if divorceday > datetime.now():
-                Error01_family.append(family[id])
-            if marriageday > datetime.now():
-                Error01_family.append(family[id])
-
-    return Error01_individuals, Error01_family
-
-
-def US6_divorce_before_death(individuals, family):
-    Error06 = []
-    for id in family:
-        if family[id]['divorce_date'] != 'NA' and family[id]['divorce_date'] != None:
-            divorced_date = datetime.strptime(family[id]['divorce_date'], "%d %b %Y")
-            husband_id = family[id]['husband_id']
-            wife_id = family[id]['wife_id']
-            if individuals[husband_id]['death_date'] != 'NA' and individuals[husband_id]['death_date'] != None:
-                husband_dday = datetime.strptime(individuals[husband_id]['death_date'], "%d %b %Y")
-                if husband_dday < divorced_date:
-                    Error06.append(individuals[husband_id])
-            if individuals[wife_id]['death_date'] != 'NA' and individuals[wife_id]['death_date'] != None:
-                wife_dday = datetime.strptime(individuals[wife_id]['death_date'], "%d %b %Y")
-                if wife_dday < divorced_date:
-                    Error06.append(individuals[wife_id])
-    return Error06
-
 #User Story 18
 for id in individuals:
     if individuals[id]["spouse"] in individuals[id]["siblings"]:
         error_msg = "ERROR: INDIVIDUAL: US018: " + individuals[id]["spouse"] + " married to their sibling"
         error_messages.append(error_msg) 
 
-output = ""
-#User Story: 01 - Dates before current date
-us1_errors = US1_dates_before_current_date(individuals, families)
-us6_errors = US6_divorce_before_death(individuals, families)
-output += "User Story: 01 - Dates before current date\n\nErrors related to Dates before current date (US01)\n: " + str(us1_errors) + "\n\n" + "These are the details for either of the birthdates, deathdates, marriagedates and divorcedates that have occured after the current date." + "\n"
-output+= "------------------------------------------------------------------------------\n\n"
-
-# User Story 06: Divorce before death
-output += "User Story 06: Divorce before death\n\nErrors related to divorce date not being before death date (US06)\n: " + str(us6_errors) + "\n\n" + "These are the details for divorce dates that have occured after the death date of an individual." + "\n"
-output+= "------------------------------------------------------------------------------\n\n"
-error_messages.append(output)
 
 print("Individuals:")
 print(individual_table)
