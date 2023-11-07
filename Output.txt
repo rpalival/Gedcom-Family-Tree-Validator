@@ -5,7 +5,7 @@ Individuals:
 |  I1 |  Allen  |  Roberts  |   M    | 1940-01-01 | 2011-05-06 | False |  {F2} |  {F1}  |   71  |
 |  I2 |  Julie  | Jefferson |   F    | 1945-12-04 | 2019-02-11 | False |   NA  |  {F1}  |   73  |
 |  I3 | Jenifer |  Roberts  |   F    | 1975-05-01 |     NA     |  True |  {F1} |  {F4}  |   48  |
-|  I4 |   Nick  |  Rosberg  |   M    | 1974-11-05 |     NA     |  True |   NA  |  {F3}  |   48  |
+|  I4 |   Nick  |  Rosberg  |   M    | 1974-11-05 |     NA     |  True |   NA  |  {F3}  |   49  |
 |  I5 |   Andy  |   Raonic  |   M    | 1974-12-06 |     NA     |  True |   NA  |  {F4}  |   48  |
 |  I6 |  Marie  |   Raonic  |   F    | 2002-07-04 |     NA     |  True |  {F4} |   NA   |   21  |
 |  I7 |  Roger  |  Rosberg  |   M    | 2021-03-01 |     NA     |  True |  {F3} |   NA   |   2   |
@@ -60,5 +60,23 @@ Errors related to User Story: 10 - Marriage should be at least 14 years after bi
 : []
 
 These are the details for who were married below 14 years.
+------------------------------------------------------------------------------
+
+
+User Story: 13 - Birth dates of siblings should be more than 8 months apart or less than 2 days apart (twins may be born one day apart, e.g. 11:59 PM and 12:02 AM the following calendar day)
+
+Errors related to User Story: 13 - Birth dates of siblings should be more than 8 months apart or less than 2 days apart (twins may be born one day apart, e.g. 11:59 PM and 12:02 AM the following calendar day)
+: []
+
+These are the details of siblings who have less difference span greater that 2 days and less than 8 months
+------------------------------------------------------------------------------
+
+
+User Story: 16 - All male members of a family should have the same last name
+
+Errors related to User Story: 16 - All male members of a family should have the same last name
+: []
+
+Errors of All male members of a family who don't have the same last name
 ------------------------------------------------------------------------------
 
