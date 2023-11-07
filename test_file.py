@@ -81,6 +81,20 @@ class TestGedcom(unittest.TestCase):
         expected_errors = []
 
         self.assertEqual(errors, expected_errors)
+    def test_ind_males_with_different_lastnames(self):
+        # Assuming we have a method that returns males with different last names
+        result = ind_males_with_different_lastnames(self.individuals, self.families)
+        # You need to define the expected result based on your data setup
+        expected_result = [] # Define expected results based on your test setup
+        self.assertEqual(result, expected_result)
+
+    def test_US_sibling_spacing(self):
+        # Assuming we have a method that checks for the spacing between sibling births
+        result = US_sibling_spacing(self.families)
+        # You need to define the expected result based on your data setup
+        expected_result = [] # Define expected results based on your test setup
+        self.assertEqual(result, expected_result)
+
 
 if __name__ == '__main__':
     unittest.main()
