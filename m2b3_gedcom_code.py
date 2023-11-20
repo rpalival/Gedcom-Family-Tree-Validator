@@ -228,6 +228,11 @@ for individual_id, individual in individuals.items():
         today = datetime.now()
         current_age = today.year - birth_date_obj.year - ((today.month, today.day) < (birth_date_obj.month, birth_date_obj.day))
 
+        if "age" not in individual:
+            individual.update({"age": current_age})
+        else:
+            individual["age"] = current_age
+
         for family_id, family in families.items():
             husband_id = family.get("husband_id")
             wife_id = family.get("wife_id")
@@ -270,7 +275,6 @@ for individual_id, individual in individuals.items():
 
     individual_table.add_row([individual_id, individual["name"], individual["gender"], individual["birth_date"], individual["death_date"], individual["spouse"], individual["Children"], individual["siblings"], current_age])
 
-    #individual_table.add_row([individual_id, individual["name"], individual["birth_date"], individual["death_date"], current_age])
 
 for family_id, family in families.items():
     husband_id = family["husband_id"]
@@ -281,8 +285,18 @@ for family_id, family in families.items():
     marriage_date = family["marriage_date"]
     divorce_date = family["divorce_date"]
 
+
     #user story 08, 09 and 17
     if "Children" in family:
+
+        for x in range(len(family["Children"])):
+            for y in range(len(family["Children"]) - x - 1):
+                if individuals[family["Children"][y]]["age"] < individuals[family["Children"][y+1]]["age"]:
+                    temp = family["Children"][y] 
+                    family["Children"][y] = family["Children"][y+1]
+                    family["Children"][y+1] = temp
+
+
         for child in family["Children"]:
             marriage_date_obj = datetime.strptime(marriage_date, "%d %b %Y")
             birth_date_obj = datetime.strptime(individuals[child]["birth_date"], "%d %b %Y")
@@ -333,7 +347,13 @@ for family_id, family in families.items():
         divorce_date_obj = datetime.strptime(divorce_date, "%d %b %Y")
         if marriage_date_obj > divorce_date_obj:
             error_msg = f"ERROR: FAMILY: US04: {family_id}: {husband_id} ({husband_name}) and {wife_id} ({wife_name}) Married {marriage_date} after divorce on {divorce_date}"
-            error_messages.append(error_msg)    
+            error_messages.append(error_msg)  
+
+    #US21
+    if individuals[husband_id]["gender"] == "F" or individuals[wife_id]["gender"] == "M":
+        error_msg = f"ERROR: FAMILY: US21: {family_id}: {husband_id} has the incorrect role in the family."
+        error_messages.append(error_msg)  
+
     
     family_table.add_row([family_id, husband_id, husband_name, wife_id, wife_name, marriage_date, divorce_date, children])
 
