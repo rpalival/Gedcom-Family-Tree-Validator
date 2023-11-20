@@ -19,14 +19,14 @@
 2 _MARNM Palival
 1 SEX M
 1 BIRT
-2 DATE 21 FEB 1998
+2 DATE 21 FEB 1992
 1 FAMC @F1@
 0 @I2@ INDI
 1 NAME Narayanlal /Palival/
 2 GIVN Narayanlal
 2 SURN Palival
 2 _MARNM Palival
-1 SEX M
+1 SEX F
 1 BIRT
 2 DATE 20 OCT 2002
 1 FAMS @F1@
@@ -48,7 +48,7 @@
 2 _MARNM Palival
 1 SEX M
 1 BIRT
-2 DATE 24 APR 1995
+2 DATE 24 APR 1990
 1 FAMC @F1@
 0 @I5@ INDI
 1 NAME Reenku /Palival/
