@@ -1,7 +1,7 @@
 import unittest
 from datetime import datetime
 import dateutil.relativedelta
-from m2b3_gedcom_code import process_gedcom_line, individual_ids, error_messages, individuals, name_birth_dict
+from m2b3_gedcom_code import process_gedcom_line, populate_living_married_table, populate_living_singles_over_30_table, individual_ids, error_messages, individuals, name_birth_dict
 
 #US03
 def birthBeforeDeath(individual):
@@ -176,9 +176,42 @@ class TestUserStories(unittest.TestCase):
         test7family = {"husband_id": {"gender": "M"}, "wife_id": {"gender": "F"}}
         self.assertTrue(correctRole(test7family))
 
+    def test_us30_living_married_people(self):
+        # Mock data
+        test_individuals = {
+            "@I1@": {"name": "John Doe", "spouse": "@I2@", "death_date": None},
+            "@I2@": {"name": "Jane Smith", "spouse": "@I1@", "death_date": None}
+        }
+        test_families = {
+            "@F1@": {"husband_id": "@I1@", "wife_id": "@I2@", "marriage_date": "10 JAN 1990"}
+        }
+        # Expected result
+        expected_result = [
+            ["@I1@", "John Doe", "@I2@", "Jane Smith", "10 JAN 1990"],
+            ["@I2@", "Jane Smith", "@I1@", "John Doe", "10 JAN 1990"]
+        ]
+
+        result_table = populate_living_married_table(test_individuals, test_families)
+        # Convert table rows to list of lists for comparison
+        result_rows = [list(row) for row in result_table._rows]
+        self.assertEqual(result_rows, expected_result)
+
+    def test_us31_living_singles_over_30(self):
+        # Mock data
+        test_individuals = {
+            "@I3@": {"name": "Alice Johnson", "birth_date": "15 FEB 1985", "age": 35, "spouse": None, "death_date": None},
+            "@I4@": {"name": "Bob White", "birth_date": "22 MAR 1980", "age": 40, "spouse": None, "death_date": None}
+        }
+        # Expected result
+        expected_result = [
+            ["@I3@", "Alice Johnson", "15 FEB 1985", 35],
+            ["@I4@", "Bob White", "22 MAR 1980", 40]
+        ]
+        result_table = populate_living_singles_over_30_table(test_individuals)
+        
+        # Convert table rows to list of lists for comparison
+        result_rows = [list(row) for row in result_table._rows]
+        self.assertEqual(result_rows, expected_result)
 
 if __name__ == '__main__':
     unittest.main()
-
-
-    
