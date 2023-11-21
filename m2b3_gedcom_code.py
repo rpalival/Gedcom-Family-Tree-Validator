@@ -361,7 +361,42 @@ for family_id, family in families.items():
 for id in individuals:
     if individuals[id]["spouse"] in individuals[id]["siblings"]:
         error_msg = "ERROR: INDIVIDUAL: US018: " + individuals[id]["spouse"] + " married to their sibling"
-        error_messages.append(error_msg) 
+        error_messages.append(error_msg)
+
+#US 30: List all living married people in a GEDCOM file
+def populate_living_married_table(individuals, families):
+    living_married_table = PrettyTable()
+    living_married_table.field_names = ["ID", "Name", "Spouse ID", "Spouse Name", "Marriage Date"]
+
+    for individual_id, individual in individuals.items():
+        if individual["spouse"] and not individual["death_date"]:  # Check if married and alive
+            spouse_id = individual["spouse"]
+            spouse_name = individuals.get(spouse_id, {}).get("name", "")
+            marriage_date = None
+            for family_id, family in families.items():
+                if spouse_id in [family["husband_id"], family["wife_id"]]:
+                    marriage_date = family["marriage_date"]
+                    break
+            living_married_table.add_row([individual_id, individual["name"], spouse_id, spouse_name, marriage_date])
+
+    return living_married_table
+
+#US 31: List all living people over 30 who have never been married in a GEDCOM file
+def populate_living_singles_over_30_table(individuals):
+    living_singles_over_30_table = PrettyTable()
+    living_singles_over_30_table.field_names = ["ID", "Name", "Birth Date", "Age"]
+
+    for individual_id, individual in individuals.items():
+        age = individual.get("age", 0)
+        death_date = individual.get("death_date", None)
+        spouse = individual.get("spouse", None)
+
+        # Check if the individual is over 30, alive, and never married
+        if age > 30 and not death_date and not spouse:
+            living_singles_over_30_table.add_row([individual_id, individual["name"], individual["birth_date"], age])
+
+    return living_singles_over_30_table
+
 
 
 print("Individuals:")
@@ -372,6 +407,11 @@ print(deceased_individuals_table)
 
 print("\nFamilies:")
 print(family_table)
+print("\nLiving Married Individuals:")
+print(populate_living_married_table(individuals, families))
+print()
+print("Living Singles Over 30:")
+print(populate_living_singles_over_30_table(individuals))
 
 print("\n" * 2)
 
