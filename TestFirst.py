@@ -68,7 +68,15 @@ def marriedToSiblings(individual):
     return False
  else: 
     return True
-    
+ 
+
+#US21
+def correctRole(family):
+    if family["husband_id"]["gender"] == "F" or family["wife_id"]["gender"] == "M":
+        return False
+    else:
+        return True
+
 
 class TestUserStories(unittest.TestCase):
 
@@ -163,6 +171,10 @@ class TestUserStories(unittest.TestCase):
         test6patriarch = "I4"
         test6matriarch = "I6"
         self.assertTrue(marriedToDescendants(test6patriarch, test6matriarch, "I1", test6Individuals))
+
+    def test_us21True(self):
+        test7family = {"husband_id": {"gender": "M"}, "wife_id": {"gender": "F"}}
+        self.assertTrue(correctRole(test7family))
 
 
 if __name__ == '__main__':
